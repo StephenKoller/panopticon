@@ -59,11 +59,23 @@ services:
       - "3001:3000"
     volumes:
       - ./docker/grafana/provisioning:/etc/grafana/provisioning
+      - ./docker/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
       - prometheus
+
+  locust:
+    build:
+      context: ./locust
+      dockerfile: Dockerfile
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./locust:/locust
+    depends_on:
+      - backend
 
   jaeger:
     image: jaegertracing/all-in-one:latest
